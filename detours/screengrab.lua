@@ -16,10 +16,7 @@ end
 
 local render = rawget(_G, "render")
 rawset(render, "Capture", lje.detour(origCapture, function(tbl)
-    lje.hooks.disable()
-        screengrab.last_screengrab_time = SysTime()
-    lje.hooks.enable()
-
+    screengrab.last_screengrab_time = SysTime()
     return origCapture(tbl)
 end))
 

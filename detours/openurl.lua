@@ -7,7 +7,7 @@ local function panelOpenUrlHk(self, url)
     lje.con_printf("[Panel:OpenURL] Attempt to open URL: $yellow{%s}", url)
     if urls.is_url_allowed(url) then
         lje.con_printf("[Panel:OpenURL] Allowing URL: $yellow{%s}", url)
-        return origPanelOpenURL(self, url)
+        return self:OpenURL(url) -- remember, LJE code has metatable remaps, so this goes to our original one.
     else
         lje.con_printf("[Panel:OpenURL] Blocking URL: $red{%s}", url)
         return

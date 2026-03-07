@@ -22,7 +22,11 @@ if not aimbot.bind_code then
     aimbot.bind_code = KEY_H
 end
 
-function aimbot.run()
+local sensitivity = GetConVar_Internal("sensitivity"):GetFloat()
+local myaw = GetConVar_Internal("m_yaw"):GetFloat()
+local mpitch = GetConVar_Internal("m_pitch"):GetFloat()
+
+function aimbot.run(cmd)
     -- update pids
     aimbot.pitch_pid.kp = config.pitch_response[1]
     aimbot.yaw_pid.kp = config.yaw_response[1]
@@ -102,7 +106,10 @@ function aimbot.run()
             currentYaw + yawOutput * dt,
             0
         )
-        lp:SetEyeAngles(currentViewAngles)
+
+        cmd:SetViewAngles(currentViewAngles)
+        cmd:SetMouseX((currentViewAngles[2] - currentYaw) / (sensitivity * myaw))
+        cmd:SetMouseY((currentViewAngles[1] - currentPitch) / (sensitivity * mpitch))
     end
 end
 
