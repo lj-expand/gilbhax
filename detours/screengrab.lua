@@ -7,17 +7,18 @@ screengrab.last_screengrab_time = 0
 screengrab.threshold = 10 -- seconds
 
 function screengrab.is_screengrab_recent()
-    return (SysTime() - screengrab.last_screengrab_time) <= screengrab.threshold
+  return (SysTime() - screengrab.last_screengrab_time) <= screengrab.threshold
 end
 
 function screengrab.get_time_since_last_screengrab()
-    return SysTime() - screengrab.last_screengrab_time
+  return SysTime() - screengrab.last_screengrab_time
 end
 
-local render = rawget(_G, "render")
-rawset(render, "Capture", lje.detour(origCapture, function(tbl)
-    screengrab.last_screengrab_time = SysTime()
-    return origCapture(tbl)
-end))
+local function captureHk(tbl)
+  screengrab.last_screengrab_time = os.clock()
+  return origCapture(tbl)
+end
+
+_G.render.Capture = lje.detour(origCapture, captureHk)
 
 return screengrab
